@@ -44,14 +44,34 @@ public class GEMenuEdit extends JMenu{
 			switch (EEditMenuItems.valueOf(e.getActionCommand())) {
 			case Undo://함수 break;
 			case Redo://함수 break;
-			case 삭제://함수 break;
-			case 잘라내기://함수 break;
-			case 복사://함수 break;
-			case 붙이기://함수 break;
+			case 삭제: delete(); break;
+			case 잘라내기: crop(); break;
+			case 복사: copy(); break;
+			case 붙이기: paste(); break;
 			case Group : group(); break;
 			case ungroup: ungroup(); break;
 
 			}
+		}
+
+		private void paste() {
+			// TODO Auto-generated method stub
+			drawingPanel.paste();
+		}
+
+		private void copy() {
+			// TODO Auto-generated method stub
+			drawingPanel.copy();
+		}
+
+		private void crop() {
+			// TODO Auto-generated method stub
+			drawingPanel.crop();
+		}
+
+		private void delete() {
+			// TODO Auto-generated method stub
+			drawingPanel.delete();
 		}
 
 		

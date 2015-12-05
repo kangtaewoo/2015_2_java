@@ -27,7 +27,7 @@ import utils.GECursorManager;
 
 public class GEDrawingPanel extends JPanel {
 	
-	private GEShape currentShape, selectedShape;
+	private GEShape currentShape, selectedShape,  copiedShape;
 	private ArrayList<GEShape> shapeList;
 	private MouseDrawinghandler drawingHandler;
 	private EState currentState;
@@ -116,6 +116,36 @@ public class GEDrawingPanel extends JPanel {
 		shapeList.addAll(tempList);
 		repaint();
 	}
+
+	public void delete() {
+		// TODO Auto-generated method stub
+		shapeList.remove(selectedShape);
+		repaint();
+	}
+
+	public void crop() {
+		// TODO Auto-generated method stub
+		copiedShape = selectedShape;
+		shapeList.remove(selectedShape);
+		repaint();
+	}
+
+	public void copy() {
+		// TODO Auto-generated method stub
+		copiedShape = selectedShape;
+		repaint();
+	}
+	
+	public void paste() {
+		// TODO Auto-generated method stub
+		//자르거나 복사한 도형이 있는지 확인(미완성)
+		if(copiedShape != null){
+			shapeList.add(copiedShape);
+			repaint();
+		} else {
+			return;
+		}
+	}
 	
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
@@ -156,7 +186,7 @@ public class GEDrawingPanel extends JPanel {
 	}
 
 	private void finishDraw(){
-		shapeList.add(currentShape);
+			shapeList.add(currentShape);
 	}
 	
 
@@ -180,22 +210,23 @@ public class GEDrawingPanel extends JPanel {
 					   selectedShape.setSelected(true);
 					   selectedShape.onAnchor(e.getPoint()); 
 					   if (selectedShape.getSelectedAnchor() == EAnchorTypes.NONE){ 
+						   //크키조정
 							transformer = new GEMover(selectedShape);
 							((GEMover) transformer).init(e.getPoint());
 							setCurrentState(EState.Moving); 
-						}else { 
+						}else { //크기조정
 							transformer = new GEResizer(selectedShape); 
 							((GEResizer) transformer).init(e.getPoint()); 
 							setCurrentState(EState.Resizer); 
 						}
-					}else {
+					}else {//선택
 						setCurrentState(EState.Selecting);
 						clearSelectedShapes();
 						initDraw(e.getPoint());
 						transformer = new GEGrouper(currentShape);
 						((GEGrouper) transformer).init(e.getPoint());
 					}
-				}else {
+				}else {//다각형그리기
 					clearSelectedShapes();
 					initDraw(e.getPoint());
 					transformer = new GEDrawer(currentShape);
@@ -258,5 +289,6 @@ public class GEDrawingPanel extends JPanel {
 
 		}
 	}
+
 
 }
